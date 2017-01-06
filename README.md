@@ -44,13 +44,13 @@ On the *JavaScript* page of the application settings, configure the **Valid SDK 
 
 Implementing the social sign in features into your FarCry application is done via a registered JS library called `fcsocial`.
 
-First the library needs to be loaded in the <head> of your HTML output, usually in the `displayHeaderStandard` webskin;
+First the library needs to be loaded in the &lt;head&gt; of your HTML output, usually in the `displayHeaderStandard` webskin;
 
     <!--- include fcsocial JS library --->
     <cfimport taglib="/farcry/core/tags/webskin" prefix="skin" />
     <skin:loadJS id="fcsocial" />
 
-Then the fcsocial plugin can be initialised near the bottom of the HTML <body>, usually in the `displayFooterStandard` webskin;
+Then the fcsocial plugin can be initialised near the bottom of the HTML &lt;body&gt;, usually in the `displayFooterStandard` webskin;
 
     <script type="text/javascript">
     $s = fcsocial($j, {
@@ -102,7 +102,7 @@ The returned object `$s` **public functions** include;
 - **$s.onLinkedInLoad()** - required by the LinkedIn `in.js` SDK
 
 
-The <script> block which initialises the LinkedIn in.js also contains some `key: value` options;
+The &lt;script&gt; block which initialises the LinkedIn in.js also contains some `key: value` options;
 
 - **api_key** - the LinkedIn App API Key
 - **authorize** - a flag to check for an existing user authentication token (note: this plugin **requires** the value: `true`)
