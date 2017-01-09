@@ -7,19 +7,29 @@
 <cfparam name="form.email" default="">
 <cfparam name="form.firstname" default="">
 <cfparam name="form.lastname" default="">
+<cfparam name="form.password" default="">
 
 <cfset stResult = structNew()>
 <cfset stResult["bSuccess"] = false>
 
 <cfset stSocial = structNew()>
 
+<cfset oUser = application.fapi.getContentType(typename="farUser")>
+
 
 <!--- validate signin api --->
-<cfif NOT listFindNoCase("facebook,linkedin", form.signin)>
+<cfif NOT listFindNoCase("facebook,linkedin,farcry", form.signin)>
 	<cfset stResult["error"] = "Invalid Sign In API">
-<!--- validate id and email --->
-<cfelseif NOT len(form.id) OR NOT len(form.email)>
-	<cfset stResult["error"] = "User ID or Email missing">
+<!--- validate id (except when farcry login is used) --->
+<cfelseif NOT len(form.id) AND form.signin neq "farcry">
+	<cfset stResult["error"] = "User ID is missing">
+<!--- validate email --->
+<cfelseif NOT len(form.email) OR NOT isValid("email", form.email)>
+	<cfset stResult["error"] = "Email address is missing or invalid">
+<!--- validate password (only when farcry login is used) --->
+<cfelseif NOT len(form.password) AND form.signin eq "farcry">
+	<cfset stResult["error"] = "Password is missing">
+	<cfset stResult["signin"] = "farcry">
 </cfif>
 
 
@@ -96,10 +106,34 @@
 </cfif>
 
 
+<!--- farcry login --->
+<cfif form.signin eq "farcry">
+	<cfset stUser = oUser.getByUserID(userid=form.email)>
+
+	<cfif NOT isValid("email", form.email)>
+		<cfset stResult["error"] = "Please provide a valid email address">
+	<cfelseif structIsEmpty(stUser)>
+		<cfset stResult["error"] = "An account was not found for this email address">
+	<cfelse>
+		<!--- check password --->
+		<cfset qUser = application.fapi.getContentObjects(typename="farUser", lProperties="objectid,userid,password,userstatus,failedLogins", userid_eq=form.email)>
+		<cfloop query="qUser">
+			<cfif application.security.cryptlib.passwordMatchesHash(password=form.password,hashedPassword=qUser.password)>
+				<!--- password matches --->
+				<cfset stResult["bSuccess"] = true>
+			</cfif>
+		</cfloop>
+
+		<cfif NOT stResult["bSuccess"]>
+			<cfset stResult["error"] = "Login failed. Invalid email address or password.">
+		</cfif>
+	</cfif>
+</cfif>
+
+
 <cfif stResult["bSuccess"]>
 
 	<!--- find user --->
-	<cfset oUser = application.fapi.getContentType(typename="farUser")>
 	<cfset stUser = oUser.getByUserID(userid=form.email)>
 
 	<cfset oProfile = application.fapi.getContentType(typename="dmProfile")>

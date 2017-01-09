@@ -9,6 +9,16 @@ fcsocial = function($, options){
 	options.facebook_xfbml = options.facebook_xfbml || true;
 	options.linkedin_api_key = options.linkedin_api_key || "";
 
+	options.farcry_loginemail = options.farcry_loginemail || "#loginemail";
+	options.farcry_loginpassword = options.farcry_loginpassword || "#loginpassword";
+	options.farcry_loginerror = options.farcry_loginerror || "#loginform .form-group:first";
+	options.farcry_signupemail = options.farcry_signupemail || "#signupemail";
+	options.farcry_signuppassword = options.farcry_signuppassword || "#signuppassword";
+	options.farcry_signupconfirmpassword = options.farcry_signupconfirmpassword || "#signupconfirmpassword";
+	options.farcry_signuperror = options.farcry_signuperror || "#signupform .form-group:first";
+	options.farcry_errorclass = options.farcry_errorclass || "alert alert-error";
+
+
 	// onSessionRequest(user) callback fires on page load when the user has an existing session
 	// e.g. this could be used each time a page is rendered to update personalised user content
 	// such as a profile menu, log CRM analytics, etc
@@ -26,6 +36,84 @@ fcsocial = function($, options){
 	options.onLogout = options.onLogout || function() {
 		// default callback reloads page after logout
 		window.location.reload(true);
+	};
+
+
+	// farcryLogin() callback fires when the sign in button is clicked
+	options.farcryLogin = options.farcryLogin || function() {
+
+		// validate farcry login
+		$.ajax({
+			url: "/login/displayAjaxSocialLogin",
+			method: "POST",
+			data: {
+				"signin": "farcry",
+				"email": $(options.farcry_loginemail).val(),
+				"password": $(options.farcry_loginpassword).val()
+			},
+			success: function(r) {
+
+				if (r.bSuccess == true) {
+					var user = {
+						"signin": "farcry",
+						"email": $(options.farcry_loginemail).val()
+					};
+
+					// login
+					login(user);
+
+				}
+				else {
+					showError(options.farcry_loginerror, r.error);
+				}
+
+			}
+		});
+
+	};
+	this.farcryLogin = options.farcryLogin;
+
+	// farcrySignUp() callback fires when the sign up button is clicked
+	options.farcrySignUp = options.farcrySignUp || function() {
+
+		// create farcry login
+		$.ajax({
+			url: "/login/displayAjaxSignUp",
+			method: "POST",
+			data: {
+				"signin": "farcry",
+				"email": $(options.farcry_signupemail).val(),
+				"password": $(options.farcry_signuppassword).val(),
+				"confirmpassword": $(options.farcry_signupconfirmpassword).val()
+			},
+			success: function(r) {
+
+				if (r.bSuccess == true) {
+					var user = {
+						"signin": "farcry",
+						"email": $(options.farcry_signupemail).val()
+					};
+
+					// login
+					login(user);
+
+				}
+				else {
+					showError(options.farcry_signuperror, r.error);
+				}
+
+			}
+		});
+
+
+	};
+	this.farcrySignUp = options.farcrySignUp;
+
+
+	// check for a user session and fire the onSessionRequest callback
+	var currentuser = getCurrentUser();
+	if (currentuser.bSucess == true) {
+		options.onSessionRequest(currentuser);
 	};
 
 
@@ -97,6 +185,7 @@ fcsocial = function($, options){
 			}
 		});
 	}
+	this.logout = logout;
 
 
 	function base64EncodeUnicode(str) {
@@ -165,7 +254,7 @@ fcsocial = function($, options){
 
 				}
 				else {
-					console.log("ERROR LOGGING IN");
+console.log("ERROR: LOGGING IN");
 				}
 
 			}
@@ -184,10 +273,6 @@ fcsocial = function($, options){
 		var user = getCurrentUser();
 		if (user.success == false) {
 			IN.API.Raw("/people/~:(id,first-name,last-name,email-address)").result(onSuccess).error(onError);
-		}
-		else {
-			// onSessionRequest callback
-			options.onSessionRequest(user);
 		}
 	}
 
@@ -254,21 +339,13 @@ fcsocial = function($, options){
 
 							}
 							else {
-								console.log("ERROR LOGGING IN");
+console.log("ERROR: LOGGING IN");
 							}
 
 						}
 					});
 
 				});
-
-			}
-			else {
-
-				// onSessionRequest callback
-				if (options.onSessionRequest != null) {
-					options.onSessionRequest(user);
-				}
 
 			}
 
@@ -278,6 +355,16 @@ fcsocial = function($, options){
 			// The person is not logged into Facebook, so we're not sure if
 			// they are logged into this app or not.
 		}
+	}
+
+
+	function showError(selector, message) {
+		hideError();
+		$("<div class='" + options.farcry_errorclass + " fcsocial-error'>" + message + "</div>").insertBefore(selector);
+	}
+
+	function hideError() {
+		$(".fcsocial-error").remove();
 	}
 
 
