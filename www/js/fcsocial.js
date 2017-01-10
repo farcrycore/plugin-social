@@ -39,7 +39,7 @@ fcsocial = function($, options){
 	};
 
 
-	// farcryLogin() callback fires when the sign in button is clicked
+	// farcryLogin() callback fires when the login form is submitted
 	options.farcryLogin = options.farcryLogin || function() {
 
 		// validate farcry login
@@ -71,9 +71,12 @@ fcsocial = function($, options){
 		});
 
 	};
-	this.farcryLogin = options.farcryLogin;
+	this.farcryLogin = function() {
+		options.farcryLogin();
+		return false;
+	};
 
-	// farcrySignUp() callback fires when the sign up button is clicked
+	// farcrySignUp() callback fires when the sign up form is submitted
 	options.farcrySignUp = options.farcrySignUp || function() {
 
 		// create farcry login
@@ -105,9 +108,11 @@ fcsocial = function($, options){
 			}
 		});
 
-
 	};
-	this.farcrySignUp = options.farcrySignUp;
+	this.farcrySignUp = function() {
+		options.farcrySignUp();
+		return false;
+	};
 
 
 	// check for a user session and fire the onSessionRequest callback
