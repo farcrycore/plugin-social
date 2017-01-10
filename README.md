@@ -71,7 +71,7 @@ Then the fcsocial plugin can be initialised near the bottom of the HTML &lt;body
     <script type="text/javascript" src="//platform.linkedin.com/in.js">
         api_key: #application.fc.lib.social.getLinkedInAPIKey()#
         authorize: true
-		scope: #application.fc.lib.social.getLinkedInPermissionScope()#
+        scope: #application.fc.lib.social.getLinkedInPermissionScope()#
         onLoad: $s.onLinkedInLoad
     </script>
     </cfif>
@@ -87,6 +87,20 @@ The **options** include;
 
 *Each of the above options can be configured in FarCry via the webtop, and read via the supporting methods provided in the `application.fc.lib.social` lib, as per the sample code above.*
 
+Additional UI related **options** include;
+
+- **farcry_loginemail** - ID of the login form email field (default: "#loginemail")
+- **farcry_loginpassword**- ID of the login form password field (default: "#loginpassword")
+- **farcry_loginerror** - selector of the element which any login error message will be inserted before (default: "#loginform .form-group:first")
+- **farcry_signupemail** - ID of the signup form email field (default: "#signupemail")
+- **farcry_signuppassword** - ID of the signup form password field (default: "#signuppassword")
+- **farcry_signupconfirmpassword** - ID of the signup form confirm password field (default: "#signupconfirmpassword")
+- **farcry_signuperror** - selector of the element which any signup error message will be inserted before (default: "#signupform .form-group:first")
+- **farcry_errorclass** - the class names which will be applied to an error message element (default: "alert alert-error")
+
+*Each of the above options are DOM selectors that are used by the library to find specified input elements, insert error message elements, or apply classes to elements. They can but customised as needed to suit your login/signup UI.*
+
+
 The **callbacks** include;
 
 - **onSessionRequest(user)** - fires on page load when the user has an existing session e.g. this could be used each time a page is rendered to update personalised user content such as a profile menu, log CRM analytics, etc. The `user` object is provided to the callback containing the available user data.
@@ -100,12 +114,55 @@ The returned object `$s` **public functions** include;
 - **$s.linkedinLogin()** - initiate a LinkedIn login (e.g. from a button onclick event)
 - **$s.linkedinLogout()** - initiate a LinkedIn logout
 - **$s.onLinkedInLoad()** - required by the LinkedIn `in.js` SDK
+- **$s.farcryLogin()** - initiate a FarCry login using the login form on the page (e.g. from a "submit" event on the form element)
+- **$s.farcrySignUp()** - initiate a FarCry signup using the sign up form on the page (e.g. from a "submit" event on the form element)
 
 
-The &lt;script&gt; block which initialises the LinkedIn in.js also contains some `key: value` options;
+The second &lt;script&gt; element initialises the LinkedIn in.js using `key: value` options;
 
 - **api_key** - the LinkedIn App API Key
 - **authorize** - a flag to check for an existing user authentication token (note: this plugin **requires** the value: `true`)
 - **scope** - the LinkedIn App Permission Scope (note: the minimum **required** permissions are: `r_basicprofile r_emailaddress`)
 - **onLoad** - the callback to run when the request has been authorized on page load
+
+
+Finally, the social login buttons and the login/signup via email forms can be placed in your webskin of choice;
+
+    <h1>Social Sign In</h1>
+    <a class="btn" onclick="$s.facebookLogin();" style="background-color: #3b5998;"><i class="fa fa-fw fa-facebook-square"></i>&nbsp;Sign In with Facebook</a>
+    <a class="btn" onclick="$s.linkedinLogin();" style="background-color: #0077b5;"><i class="fa fa-fw fa-linkedin-square"></i>&nbsp;Sign In with LikedIn</a>
+
+    <form id="loginform" onsubmit="return $s.farcryLogin();">
+        <h1>Sign In via email</h1>
+        <div class="form-group">
+            <label class="access-hide" for="loginemail">Email</label>
+            <input class="form-control" id="loginemail" placeholder="Email" type="email">
+        </div>
+        <div class="form-group">
+            <label class="access-hide" for="loginpassword">Password</label>
+            <input class="form-control" id="loginpassword" placeholder="Password" type="password">
+        </div>
+        <button class="btn" type="submit">Sign In</button>
+    </form>
+
+    <form id="signupform" onsubmit="return $s.farcrySignUp();">
+        <h1>Sign up</h1>
+        <div class="form-group">
+            <label class="access-hide" for="signupemail">Email</label>
+            <input class="form-control" id="signupemail" placeholder="Email" type="email">
+        </div>
+        <div class="form-group">
+            <label class="access-hide" for="signuppassword">Password</label>
+            <input class="form-control" id="signuppassword" placeholder="Password" type="password">
+        </div>
+        <div class="form-group">
+            <label class="access-hide" for="signupconfirmpassword">Confirm Password</label>
+            <input class="form-control" id="signupconfirmpassword" placeholder="Confirm Password" type="password">
+        </div>
+        <button class="btn" type="submit">Sign Up</button>
+    </form>
+
+ This example HTML can customised as needed to match the IDs and selector options used when initialising `fcsocial`, and the callbacks such as `$s.facebookLogin()` could be bound using JavaScript event listeners rather than using inline `onclick` or `onsubmit` attributes.
+
+ For the "submit" handlers on forms, remember to `return false` to avoid a page reload before the async requests have had time to return a response (the `$s.farcryLogin` and `$s.farcrySignUp` callbacks return false by default, hence why the example HTML above uses `onsubmit="return $s.farcryLogin();"`, etc).
 
