@@ -9,6 +9,9 @@ fcsocial = function($, options){
 	options.facebook_xfbml = options.facebook_xfbml || true;
 	options.linkedin_api_key = options.linkedin_api_key || "";
 
+	options.login_location = options.login_location || "";
+	options.logout_location = options.logout_location || "";
+
 	options.farcry_loginemail = options.farcry_loginemail || "#loginemail";
 	options.farcry_loginpassword = options.farcry_loginpassword || "#loginpassword";
 	options.farcry_loginerror = options.farcry_loginerror || "#loginform .form-group:first";
@@ -28,14 +31,22 @@ fcsocial = function($, options){
 
 	// onLogin(user) callback fires after the user has just logged in successfully
 	options.onLogin = options.onLogin || function(user) {
-		// default callback reloads page after login
-		window.location.reload(true);
+		if (options.login_location == "") {
+			window.location.reload(true);
+		}
+		else {
+			window.location.href = options.login_location;
+		}
 	};
 
 	// onLogout() callback fires after the user has just logged out
 	options.onLogout = options.onLogout || function() {
-		// default callback reloads page after logout
-		window.location.reload(true);
+		if (options.logout_location == "") {
+			window.location.reload(true);
+		}
+		else {
+			window.location.href = options.logout_location;
+		}
 	};
 
 
