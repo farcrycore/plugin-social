@@ -53,9 +53,8 @@ fcsocial = function($, options){
 	// farcryLogin() callback fires when the login form is submitted
 	options.farcryLogin = options.farcryLogin || function() {
 
-		// validate farcry login
 		$.ajax({
-			url: "/login/displayAjaxSocialLogin",
+			url: "/farLogin/displayAjaxSocialLogin",
 			method: "POST",
 			data: {
 				"signin": "farcry",
@@ -90,9 +89,8 @@ fcsocial = function($, options){
 	// farcrySignUp() callback fires when the sign up form is submitted
 	options.farcrySignUp = options.farcrySignUp || function() {
 
-		// create farcry login
 		$.ajax({
-			url: "/login/displayAjaxSignUp",
+			url: "/farLogin/displayAjaxSignUp",
 			method: "POST",
 			data: {
 				"signin": "farcry",
@@ -244,7 +242,7 @@ fcsocial = function($, options){
 
 		// validate linkedin login
 		$.ajax({
-			url: "/login/displayAjaxSocialLogin",
+			url: "/farLogin/displayAjaxSocialLogin",
 			method: "POST",
 			data: {
 				"signin": "linkedin",
@@ -329,7 +327,7 @@ console.log("ERROR: LOGGING IN");
 
 					// validate facebook login
 					$.ajax({
-						url: "/login/displayAjaxSocialLogin",
+						url: "/farLogin/displayAjaxSocialLogin",
 						method: "POST",
 						data: {
 							"signin": "facebook",
