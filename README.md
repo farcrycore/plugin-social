@@ -162,7 +162,7 @@ Finally, the social login buttons and the login/signup via email forms can be pl
         <button class="btn" type="submit">Sign Up</button>
     </form>
 
- This example HTML can customised as needed to match the IDs and selector options used when initialising `fcsocial`, and the callbacks such as `$s.facebookLogin()` could be bound using JavaScript event listeners rather than using inline `onclick` or `onsubmit` attributes.
+This example HTML can customised as needed to match the IDs and selector options used when initialising `fcsocial()`, and the callbacks such as `$s.facebookLogin()` could be bound using JavaScript event listeners rather than using inline `onclick` or `onsubmit` attributes.
 
- For the "submit" handlers on forms, remember to `return false` to avoid a page reload before the async requests have had time to return a response (the `$s.farcryLogin` and `$s.farcrySignUp` callbacks return false by default, hence why the example HTML above uses `onsubmit="return $s.farcryLogin();"`, etc).
+For the "submit" handlers on forms, remember to `return false` to avoid a page reload before the async requests have had time to return a response (the `$s.farcryLogin` and `$s.farcrySignUp` callbacks return false by default, hence why the example HTML above uses `onsubmit="return $s.farcryLogin();"`, etc).
 

@@ -19,7 +19,17 @@ fcsocial = function($, options){
 	options.farcry_signuppassword = options.farcry_signuppassword || "#signuppassword";
 	options.farcry_signupconfirmpassword = options.farcry_signupconfirmpassword || "#signupconfirmpassword";
 	options.farcry_signuperror = options.farcry_signuperror || "#signupform .form-group:first";
-	options.farcry_errorclass = options.farcry_errorclass || "alert alert-error";
+	options.farcry_forgotpasswordemail = options.farcry_forgotpasswordemail || "#forgotpasswordemail";
+	options.farcry_forgotpassworderror = options.farcry_forgotpassworderror || "#forgotpasswordform .form-group:first";
+	options.farcry_forgotpasswordsubmit = options.farcry_forgotpasswordsubmit || "#forgotpasswordform .btn";
+	options.farcry_passwordresetemail = options.farcry_passwordresetemail || "#passwordresetemail";
+	options.farcry_passwordresetkey = options.farcry_passwordresetkey || "#passwordresetkey";
+	options.farcry_passwordresetpassword = options.farcry_passwordresetpassword || "#passwordresetpassword";
+	options.farcry_passwordresetconfirmpassword = options.farcry_passwordresetconfirmpassword || "#passwordresetconfirmpassword";
+	options.farcry_passwordreseterror = options.farcry_passwordreseterror || "#passwordresetform .form-group:first";
+
+	options.farcry_successclass = options.farcry_successclass || "alert alert-success";
+	options.farcry_errorclass = options.farcry_errorclass || "alert alert-danger";
 
 
 	// onSessionRequest(user) callback fires on page load when the user has an existing session
@@ -50,16 +60,20 @@ fcsocial = function($, options){
 	};
 
 
+
 	// farcryLogin() callback fires when the login form is submitted
-	options.farcryLogin = options.farcryLogin || function() {
+	options.farcryLogin = options.farcryLogin || function(email, password) {
+
+		email = email || $(options.farcry_loginemail).val();
+		password = password || $(options.farcry_loginpassword).val();
 
 		$.ajax({
 			url: "/farLogin/displayAjaxSocialLogin",
 			method: "POST",
 			data: {
 				"signin": "farcry",
-				"email": $(options.farcry_loginemail).val(),
-				"password": $(options.farcry_loginpassword).val()
+				"email": email,
+				"password": password
 			},
 			success: function(r) {
 
@@ -120,6 +134,84 @@ fcsocial = function($, options){
 	};
 	this.farcrySignUp = function() {
 		options.farcrySignUp();
+		return false;
+	};
+
+	// farcryForgotPassword() callback fires when the forgot password form is submitted
+	options.farcryForgotPassword = options.farcryForgotPassword || function() {
+
+		$.ajax({
+			url: "/farLogin/displayAjaxForgotPassword",
+			method: "POST",
+			data: {
+				"signin": "farcry",
+				"email": $(options.farcry_forgotpasswordemail).val(),
+			},
+			success: function(r) {
+				if (r.bSuccess == true) {
+					// show success message
+					showSuccess(options.farcry_forgotpassworderror, "An email has been sent to you containing a link to reset your password.");
+				}
+				else {
+					showError(options.farcry_forgotpassworderror, r.error);
+				}
+
+			},
+			error: function() {
+				showError(options.farcry_forgotpassworderror, "There was an error sending your password reset email. Please contact the site administrators.");
+			}
+		});
+
+	};
+	this.farcryForgotPassword = function() {
+		options.farcryForgotPassword();
+		return false;
+	};
+
+	// farcryPasswordReset() callback fires when the forgot password form is submitted
+	options.farcryPasswordReset = options.farcryPasswordReset || function() {
+
+		var email = $(options.farcry_passwordresetemail).val();
+		var password = $(options.farcry_passwordresetpassword).val();
+
+		$.ajax({
+			url: "/farLogin/displayAjaxPasswordReset",
+			method: "POST",
+			data: {
+				"signin": "farcry",
+				"email": email,
+				"key": $(options.farcry_passwordresetkey).val(),
+				"password": password,
+				"confirmpassword": $(options.farcry_passwordresetconfirmpassword).val()
+			},
+			success: function(r) {
+
+				if (r.bSuccess == true) {
+					var user = {
+						"signin": "farcry",
+						"email": email
+					};
+
+					// login and redirect to home page
+					if (options.login_location == "") {
+						options.login_location = "/";
+					}
+					options.farcryLogin(email, password);
+
+				}
+				else {
+					showError(options.farcry_passwordreseterror, r.error);
+				}
+
+			},
+			error: function() {
+				showError(options.farcry_passwordreseterror, "There was an error resetting your password. Please try again or contact the site administrators.");
+			}
+		});
+
+	};
+	this.farcryPasswordReset = function() {
+		options.farcryPasswordReset();
 		return false;
 	};
 
@@ -384,6 +476,11 @@ console.log("ERROR: LOGGING IN");
 		}
 	}
 
+
+	function showSuccess(selector, message) {
+		hideError();
+		$("<div class='" + options.farcry_successclass + " fcsocial-error'>" + message + "</div>").insertBefore(selector);
+	}
 
 	function showError(selector, message) {
 		hideError();
