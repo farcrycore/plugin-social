@@ -189,9 +189,23 @@ fcsocial = function($, options){
 	}
 
 	function logout() {
+		var user = getCurrentUser();
+		if (user && user.signin) {
+			if (user.signin == "facebook") facebookLogout();
+			else if (user.signin == "linkedin") linkedinLogout();
+			else if (user.signin == "farcry") removeSession();
+		}
+		else {
+ 			removeSession();
+		}
+	}
+	this.logout = logout;
+
+
+	function removeSession() {
 		document.cookie = "FCSOCIAL=;expires=0";
 		$.ajax({
-			url: "/login/displayAjaxSocialLogout",
+			url: "/farLogin/displayAjaxSocialLogout",
 			method: "POST",
 			success: function(r) {
 				// onLogout callback
@@ -199,7 +213,6 @@ fcsocial = function($, options){
 			}
 		});
 	}
-	this.logout = logout;
 
 
 	function base64EncodeUnicode(str) {
@@ -232,7 +245,7 @@ fcsocial = function($, options){
 
 	this.linkedinLogout = function() {
 		IN.User.logout(function(){
-			logout();
+			removeSession();
 		});
 	}
 
@@ -305,7 +318,7 @@ console.log("ERROR: LOGGING IN");
 
 	this.facebookLogout = function() {
 		FB.logout(function(response) {
-			logout();
+			removeSession();
 		});
 	}
 
