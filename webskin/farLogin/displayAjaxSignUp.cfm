@@ -57,6 +57,7 @@
 	<!--- set up the profile --->
 	<cfset stProfile = {
 		username: form.email,
+		emailAddress: form.email,
 		bActive: 1,
 		userdirectory: "CLIENTUD"
 	}>
