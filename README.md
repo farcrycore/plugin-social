@@ -115,6 +115,7 @@ Additional UI related **options** include;
 
 The **callbacks** include;
 
+- **onAnonymousRequest()** - fires on page load when the user does not have a session e.g. this could be used each time a page is rendered to log CRM analytics, etc
 - **onSessionRequest(user)** - fires on page load when the user has an existing session e.g. this could be used each time a page is rendered to update personalised user content such as a profile menu, log CRM analytics, etc. The `user` object is provided to the callback containing the available user data.
 - **onLogin(user)** - fires after the user has just logged in successfully. If this callback is not provided the default behaviour is to reload the page after login.
 - **onLogout()** - fires after the user has just logged out. If this callback is not provided the default behaviour is to reload the page after logout.

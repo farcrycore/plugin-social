@@ -33,6 +33,12 @@ fcsocial = function($, options){
 	options.farcry_errorclass = options.farcry_errorclass || "alert alert-danger";
 
 
+	// onAnonymousRequest() callback fires on page load when the user does not have a session
+	// e.g. this could be used each time a page is rendered to log CRM analytics, etc
+	options.onAnonymousRequest = options.onAnonymousRequest || function() {
+		// default callback for anonymous requests is empty
+	};
+
 	// onSessionRequest(user) callback fires on page load when the user has an existing session
 	// e.g. this could be used each time a page is rendered to update personalised user content
 	// such as a profile menu, log CRM analytics, etc
@@ -228,6 +234,9 @@ fcsocial = function($, options){
 	var currentuser = getCurrentUser();
 	if (currentuser.success == true) {
 		options.onSessionRequest(currentuser);
+	}
+	else {
+		options.onAnonymousRequest();
 	};
 
 
