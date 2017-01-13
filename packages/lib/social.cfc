@@ -80,12 +80,11 @@
 		<cfset var html = "">
 
 		<!--- get password reset link --->
-		<cfset var link = application.fapi.getLink(type="farLogin", view="displayPagePasswordReset", urlParameters="email=#stProfile.emailAddress#&key=#arguments.forgotPasswordHash#", includeDomain=true)>
+		<cfset var link = application.fapi.getLink(type="farLogin", view="displayPagePasswordReset", urlParameters="email=#encodeForURL(stProfile.emailAddress)#&key=#arguments.forgotPasswordHash#", includeDomain=true)>
 
 		<!--- get email HTML --->
 		<cfimport taglib="/farcry/core/tags/webskin" prefix="skin" />
 		<skin:view r_html="html" bIgnoreSecurity="true" typename="dmProfile" stObject="#arguments.stProfile#" webskin="emailPasswordReset" link="#link#" />
-
 
 		<!--- send email --->
 		<cfmail from="#getEmailFromAddress()#" to="#stProfile.emailAddress#" subject="#getEmailPasswordResetSubject()#" type="html">
