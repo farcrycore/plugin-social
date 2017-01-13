@@ -11,6 +11,7 @@ fcsocial = function($, options){
 
 	options.login_location = options.login_location || "";
 	options.logout_location = options.logout_location || "";
+	options.login_socialbuttons = options.login_socialbuttons || "#loginsocialbuttons";
 
 	options.farcry_loginemail = options.farcry_loginemail || "#loginemail";
 	options.farcry_loginpassword = options.farcry_loginpassword || "#loginpassword";
@@ -91,6 +92,9 @@ fcsocial = function($, options){
 					showError(options.farcry_loginerror, r.error);
 				}
 
+			},
+			error: function() {
+				showError(options.farcry_loginerror, "There was an error logging in. Please try again or contact the site administrators.");
 			}
 		});
 
@@ -128,7 +132,11 @@ fcsocial = function($, options){
 					showError(options.farcry_signuperror, r.error);
 				}
 
+			},
+			error: function() {
+				showError(options.farcry_signuperror, "There was an error signing up. Please try again or contact the site administrators.");
 			}
+
 		});
 
 	};
@@ -373,9 +381,12 @@ fcsocial = function($, options){
 
 				}
 				else {
-console.log("ERROR: LOGGING IN");
+					showError(options.login_socialbuttons, "There was an error logging in. Please try again or contact the site administrators.");
 				}
 
+			},
+			error: function() {
+				showError(options.login_socialbuttons, "There was an error logging in. Please try again or contact the site administrators.");
 			}
 		});
 
@@ -458,9 +469,12 @@ console.log("ERROR: LOGGING IN");
 
 							}
 							else {
-console.log("ERROR: LOGGING IN");
+								showError(options.login_socialbuttons, "There was an error logging in. Please try again or contact the site administrators.");
 							}
 
+						},
+						error: function() {
+							showError(options.login_socialbuttons, "There was an error logging in. Please try again or contact the site administrators.");
 						}
 					});
 
