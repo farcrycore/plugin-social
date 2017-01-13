@@ -21,10 +21,13 @@
 <cfset stExistingUser = oUser.getByUserID(userid=url.email)>
 <cfif structIsEmpty(stExistingUser)>
 	<cfset url.bodyview = "displayTypeBodyPasswordResetError">
+	<cflog file="social" text="user account not found -- email=#url.email# key=#url.key#">
 <cfelseif NOT structKeyExists(stExistingUser, "forgotPasswordHash") OR NOT len(stExistingUser.forgotPasswordHash)>
 	<cfset url.bodyview = "displayTypeBodyPasswordResetError">
+	<cflog file="social" text="user account forgot password hash not found -- email=#url.email# key=#url.key#">
 <cfelseif NOT len(url.key) OR stExistingUser.forgotPasswordHash neq url.key>
 	<cfset url.bodyview = "displayTypeBodyPasswordResetError">
+	<cflog file="social" text="user account password hash does not match -- email=#url.email# key=#url.key#">
 </cfif>
 
 <!--- render the page --->
