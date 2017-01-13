@@ -42,7 +42,9 @@ On the *JavaScript* page of the application settings, configure the **Valid SDK 
 
 ## Sample Code / Implementation
 
-Implementing the social sign in features into your FarCry application is done via a registered JS library called `fcsocial`.
+Implementing the social sign in features into your FarCry application is done via a registered JS library called `fcsocial`, and embedding some HTML for the login buttons, login form, sign up form, and forgot password form.
+
+### JavaScript configuration
 
 First the library needs to be loaded in the &lt;head&gt; of your HTML output, usually in the `displayHeaderStandard` webskin;
 
@@ -89,12 +91,22 @@ The **options** include;
 
 Additional UI related **options** include;
 
+- **login_location** - a custom login location to redirect to (default: empty string, page will reload)
+- **logout_location** - a custom logout location to redirect to (default: empty string, page will reload)
 - **farcry_loginemail** - ID of the login form email field (default: "#loginemail")
 - **farcry_loginpassword**- ID of the login form password field (default: "#loginpassword")
 - **farcry_loginerror** - selector of the element which any login error message will be inserted before (default: "#loginform .form-group:first")
 - **farcry_signupemail** - ID of the signup form email field (default: "#signupemail")
 - **farcry_signuppassword** - ID of the signup form password field (default: "#signuppassword")
 - **farcry_signupconfirmpassword** - ID of the signup form confirm password field (default: "#signupconfirmpassword")
+- **farcry_forgotpasswordemail** - ID of the forgot password form email field (default: "#forgotpasswordemail")
+- **farcry_forgotpassworderror** - selector of the element which any forgot password error message will be inserted before (default: "#forgotpasswordform .form-group:first")
+- **farcry_forgotpasswordsubmit** - ID of the forgot password submit button (default: "#forgotpasswordform .btn")
+- **farcry_passwordresetemail** - ID of the password reset form email field (default: "#passwordresetemail")
+- **farcry_passwordresetkey** - ID of the password reset key hidden field (default: "#passwordresetkey")
+- **farcry_passwordresetpassword** - ID of the password reset form password field (default: "#passwordresetpassword")
+- **farcry_passwordresetconfirmpassword** - ID of the password reset form confirm password field (default: "#passwordresetconfirmpassword")
+- **farcry_passwordreseterror** - selector of the element which any password reset error message will be inserted before (default: "#passwordresetform .form-group:first")
 - **farcry_signuperror** - selector of the element which any signup error message will be inserted before (default: "#signupform .form-group:first")
 - **farcry_errorclass** - the class names which will be applied to an error message element (default: "alert alert-error")
 
@@ -109,6 +121,7 @@ The **callbacks** include;
 
 The returned object `$s` **public functions** include;
 
+- **$s.logout()** - initiate a logout of the current user session
 - **$s.facebookLogin()** - initiate a Facebook login (e.g. from a button onclick event)
 - **$s.facebookLogout()** - initiate a Facebook logout
 - **$s.linkedinLogin()** - initiate a LinkedIn login (e.g. from a button onclick event)
@@ -116,7 +129,8 @@ The returned object `$s` **public functions** include;
 - **$s.onLinkedInLoad()** - required by the LinkedIn `in.js` SDK
 - **$s.farcryLogin()** - initiate a FarCry login using the login form on the page (e.g. from a "submit" event on the form element)
 - **$s.farcrySignUp()** - initiate a FarCry signup using the sign up form on the page (e.g. from a "submit" event on the form element)
-
+- **$s.farcryForgotPassword()** - initiate a forgot password email using the forgot password form on the page (e.g. from a "submit" event on the form element)
+- **$s.farcryPasswordReset()** - initiate a password reset using the password reset form on the page (e.g. from a "submit" event on the form element)
 
 The second &lt;script&gt; element initialises the LinkedIn in.js using `key: value` options;
 
@@ -126,7 +140,11 @@ The second &lt;script&gt; element initialises the LinkedIn in.js using `key: val
 - **onLoad** - the callback to run when the request has been authorized on page load
 
 
-Finally, the social login buttons and the login/signup via email forms can be placed in your webskin of choice;
+### HTML for the UI
+
+The social login buttons and the login/signup via email forms can be placed in your webskin of choice. These forms below are examples which work with the default configuration options in the `fcsocial` JS library.
+
+#### Login buttons/form
 
     <h1>Social Sign In</h1>
     <a class="btn" onclick="$s.facebookLogin();" style="background-color: #3b5998;"><i class="fa fa-fw fa-facebook-square"></i>&nbsp;Sign In with Facebook</a>
@@ -145,6 +163,9 @@ Finally, the social login buttons and the login/signup via email forms can be pl
         <button class="btn" type="submit">Sign In</button>
     </form>
 
+
+#### Sign up form
+
     <form id="signupform" onsubmit="return $s.farcrySignUp();">
         <h1>Sign up</h1>
         <div class="form-group">
@@ -162,7 +183,45 @@ Finally, the social login buttons and the login/signup via email forms can be pl
         <button class="btn" type="submit">Sign Up</button>
     </form>
 
-This example HTML can customised as needed to match the IDs and selector options used when initialising `fcsocial()`, and the callbacks such as `$s.facebookLogin()` could be bound using JavaScript event listeners rather than using inline `onclick` or `onsubmit` attributes.
+#### Forgot password form
+
+    <form id="forgotpasswordform" onsubmit="return $s.farcryForgotPassword();">
+        <h1>Forgot password?</h1>
+        <div class="form-group">
+            <label class="access-hide" for="forgotpasswordemail">Email</label>
+            <input class="form-control" id="forgotpasswordemail" placeholder="Email" type="email">
+        </div>
+        <button class="btn" type="submit">Reset password</button>
+    </form>
+
+#### Password reset form
+
+This example HTML is provided by the plugin in the `farLogin/displayTypeBodyPasswordReset.cfm` webskin. You can override it in your project to customise it.
+
+    <form id="passwordresetform" onsubmit="return $s.farcryPasswordReset();">
+        <h1>Reset Password</h1>
+        <div class="form-group">
+            <label for="passwordresetpassword">New Password</label>
+            <input id="passwordresetpassword" placeholder="New Password" type="password">
+        </div>
+        <div class="form-group">
+            <label for="passwordresetconfirmpassword">Confirm Password</label>
+            <input id="passwordresetconfirmpassword" placeholder="Confirm New Password" type="password">
+        </div>
+        <input type="hidden" id="passwordresetemail" value="#url.email#">
+        <input type="hidden" id="passwordresetkey" value="#url.key#">
+        <button type="submit">Reset Password</button>
+    </form>
+
+
+#### Customisations
+
+The example HTML can customised as needed to match the IDs and selector options used when initialising `fcsocial()`, and the callbacks such as `$s.facebookLogin()` could be bound using JavaScript event listeners rather than using inline `onclick` or `onsubmit` attributes.
 
 For the "submit" handlers on forms, remember to `return false` to avoid a page reload before the async requests have had time to return a response (the `$s.farcryLogin` and `$s.farcrySignUp` callbacks return false by default, hence why the example HTML above uses `onsubmit="return $s.farcryLogin();"`, etc).
+
+
+### Forgot Password email template
+
+If a user who has signed up via email needs to request a password reset an email is sent using the template defined in the `dmProfile/emailPasswordReset.cfm"` webskin. You can override it in your project to customise it.
 
