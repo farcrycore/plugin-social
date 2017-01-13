@@ -218,7 +218,7 @@ fcsocial = function($, options){
 
 	// check for a user session and fire the onSessionRequest callback
 	var currentuser = getCurrentUser();
-	if (currentuser.bSucess == true) {
+	if (currentuser.success == true) {
 		options.onSessionRequest(currentuser);
 	};
 
