@@ -353,9 +353,14 @@ fcsocial = function($, options){
 	};
 
 	this.linkedinLogout = function() {
-		IN.User.logout(function(){
+		try {
+			IN.User.logout(function(){
+				removeSession();
+			});
+		}
+		catch (err) {
 			removeSession();
-		});
+		}
 	}
 
 
@@ -429,9 +434,14 @@ fcsocial = function($, options){
 	}
 
 	this.facebookLogout = function() {
-		FB.logout(function(response) {
+		try {
+			FB.logout(function(response) {
+				removeSession();
+			});
+		}
+		catch (err) {
 			removeSession();
-		});
+		}
 	}
 
 	// This is called with the results from from FB.getLoginStatus().

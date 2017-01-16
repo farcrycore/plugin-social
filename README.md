@@ -149,7 +149,7 @@ The social login buttons and the login/signup via email forms can be placed in y
 
     <h1>Social Sign In</h1>
     <a class="btn" onclick="$s.facebookLogin();" style="background-color: #3b5998;"><i class="fa fa-fw fa-facebook-square"></i>&nbsp;Sign In with Facebook</a>
-    <a class="btn" onclick="$s.linkedinLogin();" style="background-color: #0077b5;"><i class="fa fa-fw fa-linkedin-square"></i>&nbsp;Sign In with LikedIn</a>
+    <a class="btn" onclick="$s.linkedinLogin();" style="background-color: #0077b5;"><i class="fa fa-fw fa-linkedin-square"></i>&nbsp;Sign In with LinkedIn</a>
 
     <form id="loginform" onsubmit="return $s.farcryLogin();">
         <h1>Sign In via email</h1>
