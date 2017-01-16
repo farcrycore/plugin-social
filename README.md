@@ -143,9 +143,13 @@ The second &lt;script&gt; element initialises the LinkedIn in.js using `key: val
 
 ### HTML for the UI
 
-The social login buttons and the login/signup via email forms can be placed in your webskin of choice. These forms below are examples which work with the default configuration options in the `fcsocial` JS library.
+The social login buttons and the login/signup via email forms can be placed in your webskin of choice. These forms below are examples which work with the default configuration options in the `fcsocial` JS library. 
 
 #### Login buttons/form
+
+This example HTML is provided by the plugin in the `farLogin/displayLoginDialog.cfm` webskin. You can override it in your project or place it in your own webskin to customise it.
+
+The default login page can be accessed via `/login`. You can customise the rendering of the login page body itself by overriding the `farLogin/displayTypeBody.cfm` webskin.
 
     <h1>Social Sign In</h1>
     <a class="btn" onclick="$s.facebookLogin();" style="background-color: #3b5998;"><i class="fa fa-fw fa-facebook-square"></i>&nbsp;Sign In with Facebook</a>
@@ -167,6 +171,8 @@ The social login buttons and the login/signup via email forms can be placed in y
 
 #### Sign up form
 
+This example HTML is provided by the plugin in the `farLogin/displayLoginDialog.cfm` webskin. You can override it in your project or place it in your own webskin to customise it.
+
     <form id="signupform" onsubmit="return $s.farcrySignUp();">
         <h1>Sign up</h1>
         <div class="form-group">
@@ -186,6 +192,8 @@ The social login buttons and the login/signup via email forms can be placed in y
 
 #### Forgot password form
 
+This example HTML is provided by the plugin in the `farLogin/displayLoginDialog.cfm` webskin. You can override it in your project or place it in your own webskin to customise it.
+
     <form id="forgotpasswordform" onsubmit="return $s.farcryForgotPassword();">
         <h1>Forgot password?</h1>
         <div class="form-group">
@@ -198,6 +206,8 @@ The social login buttons and the login/signup via email forms can be placed in y
 #### Password reset form
 
 This example HTML is provided by the plugin in the `farLogin/displayTypeBodyPasswordReset.cfm` webskin. You can override it in your project to customise it.
+
+The link to the password reset form is generated in the `sendPasswordResetEmail` method of the `social` lib. You can extend the lib into your project and override this method to customise it. The default password reset URL is `/login/passwordreset`.
 
     <form id="passwordresetform" onsubmit="return $s.farcryPasswordReset();">
         <h1>Reset Password</h1>
