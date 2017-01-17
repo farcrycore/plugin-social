@@ -430,6 +430,9 @@ fcsocial = function($, options){
 			FB.getLoginStatus(function(response) {
 				statusChangeCallback(response);
 			});
+		}, {
+			scope: "email",
+			auth_type: "rerequest"
 		});
 	}
 

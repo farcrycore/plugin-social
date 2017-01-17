@@ -51,7 +51,13 @@
 		<cfset stUser = deserializeJSON(stResponse.filecontent)>
 
 		<!--- validate response --->
-		<cfif structKeyExists(stUser, "id") AND stUser.id eq form.id AND structKeyExists(stUser, "email") AND stUser.email eq form.email>
+		<cfif NOT structKeyExists(stUser, "email") OR NOT len(stUser.email)>
+			<cfset stResult["error"] = "Facebook login failed. Your email address is required to complete your account.">
+		<cfelseif stUser.email neq form.email>
+			<cfset stResult["error"] = "Facebook API Error - Invalid Email">
+		<cfelseif NOT structKeyExists(stUser, "id") OR NOT len(stUser.id) OR stUser.id neq form.id>
+			<cfset stResult["error"] = "Facebook API Error - Invalid User ID">
+		<cfelse>
 			<cfset stSocial.facebookID = stUser.id>
 			<cfset stSocial.emailAddress = stUser.email>
 			<cfset stSocial.firstname = stUser.first_name>
@@ -60,10 +66,8 @@
 			<cfset form.email = stUser.email>
 			<cfset stResult["bSuccess"] = true>
 		</cfif>
-	</cfif>
-
-	<cfif NOT stResult["bSuccess"]>
-		<!--- login error --->
+	<cfelse>
+		<!--- facebook api error --->
 		<cfset stResult["error"] = "Facebook API Error - Invalid Repsonse">
 	</cfif>
 </cfif>
