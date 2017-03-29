@@ -27,6 +27,9 @@
 <cfelseif form.password neq form.confirmpassword>
 	<cfset stResult["error"] = "Please provide a password and matching confirmation password">
 	<cfset stResult["bSuccess"] = false>
+<cfelseif application.fapi.getConfig("social", "bSignupName") and (not len(form.firstname) or not len(form.lastname))>
+	<cfset stResult["error"] = "Please provide your name">
+	<cfset stResult["bSuccess"] = false>
 </cfif>
 
 <!--- find existing user --->
@@ -39,6 +42,7 @@
 	</cfif>
 </cfif>
 
+<!--- validate name --->
 
 <cfif stResult["bSuccess"]>
 
@@ -61,6 +65,11 @@
 		bActive: 1,
 		userdirectory: "CLIENTUD"
 	}>
+
+	<cfif application.fapi.getConfig("social", "bSignupName")>
+		<cfset stProfile.firstname = form.firstname />
+		<cfset stProfile.lastname = form.lastname />
+	</cfif>
 
 	<!--- create the profile --->
 	<cfset stProfile = oProfile.createProfile(stProperties=stProfile)>

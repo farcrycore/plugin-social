@@ -6,6 +6,9 @@
 		ftType="integer"
 		ftHint="The number of seconds for the social sign in cookies">
 
+	<cfproperty name="bSignupName" type="boolean" required="false" default="false"
+		ftSeq="5" ftFieldset="Email Signup" ftLabel="Ask For Name" />
+
 	<cfproperty name="facebookAppID" type="string"
 		ftSeq="11" ftFieldset="Facebook API" ftLabel="App ID"
 		ftHint="The Application ID of the Facebook App to sign in to">

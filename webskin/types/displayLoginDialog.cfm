@@ -26,7 +26,7 @@
 		<button class="btn" type="submit">Sign In</button>
 	</form>
 
-	<formid="signupform" onsubmit="return $s.farcrySignUp();">
+	<form id="signupform" onsubmit="return $s.farcrySignUp();">
 		<h1>Sign up</h1>
 		<div class="form-group">
 			<label class="access-hide" for="signupemail">Email</label>
@@ -40,10 +40,20 @@
 			<label class="access-hide" for="signupconfirmpassword">Confirm Password</label>
 			<input class="form-control" id="signupconfirmpassword" placeholder="Confirm Password" type="password">
 		</div>
+		<cfif application.fapi.getConfig("social", "bSignupName")>
+			<div class="form-group">
+				<label class="access-hide" for="signupfirstname">First Name</label>
+				<input class="form-control" id="signupfirstname" placeholder="" type="text">
+			</div>
+			<div class="form-group">
+				<label class="access-hide" for="signuplastname">Last Name</label>
+				<input class="form-control" id="signuplastname" placeholder="" type="text">
+			</div>
+		</cfif>
 		<button class="btn" type="submit">Sign Up</button>
 	</form>
 
-	<formid="forgotpasswordform" onsubmit="return $s.farcryForgotPassword();">
+	<form id="forgotpasswordform" onsubmit="return $s.farcryForgotPassword();">
 		<h1>Forgot password?</h1>
 		<p>Please provide your email address. A link to reset your password will be sent to you.</p>
 		<div class="form-group">

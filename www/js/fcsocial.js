@@ -19,6 +19,8 @@ fcsocial = function($, options){
 	options.farcry_signupemail = options.farcry_signupemail || "#signupemail";
 	options.farcry_signuppassword = options.farcry_signuppassword || "#signuppassword";
 	options.farcry_signupconfirmpassword = options.farcry_signupconfirmpassword || "#signupconfirmpassword";
+	options.farcry_signupfirstname = options.farcry_signupfirstname || "#signupfirstname";
+	options.farcry_signuplastname = options.farcry_signuplastname || "#signuplastname";
 	options.farcry_signuperror = options.farcry_signuperror || "#signupform .form-group:first";
 	options.farcry_forgotpasswordemail = options.farcry_forgotpasswordemail || "#forgotpasswordemail";
 	options.farcry_forgotpassworderror = options.farcry_forgotpassworderror || "#forgotpasswordform .form-group:first";
@@ -120,7 +122,9 @@ fcsocial = function($, options){
 				"signin": "farcry",
 				"email": $(options.farcry_signupemail).val(),
 				"password": $(options.farcry_signuppassword).val(),
-				"confirmpassword": $(options.farcry_signupconfirmpassword).val()
+				"confirmpassword": $(options.farcry_signupconfirmpassword).val(),
+				"firstname": $(options.farcry_signupfirstname).val(),
+				"lastname": $(options.farcry_signuplastname).val()
 			},
 			success: function(r) {
 
