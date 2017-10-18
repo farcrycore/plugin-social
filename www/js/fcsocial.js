@@ -291,7 +291,7 @@ fcsocial = function($, options){
 
 	function setCurrentUser(user) {
 		// set user cookie
-		document.cookie = "FCSOCIAL=" + base64EncodeUnicode(JSON.stringify(user)) + ";max-age=" + options.maxage;
+		document.cookie = "FCSOCIAL=" + base64EncodeUnicode(JSON.stringify(user)) + ";max-age=" + options.maxage + ";path=/";
 	}
 
 
