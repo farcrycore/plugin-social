@@ -89,7 +89,7 @@ fcsocial = function($, options){
 				if (r.bSuccess == true) {
 					var user = {
 						"signin": "farcry",
-						"email": $(options.farcry_loginemail).val()
+						"email": r.email || $(options.farcry_loginemail).val()
 					};
 
 					// login
