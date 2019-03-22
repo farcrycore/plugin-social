@@ -21,6 +21,11 @@ fcsocial = function($, options){
 	options.farcry_signupconfirmpassword = options.farcry_signupconfirmpassword || "#signupconfirmpassword";
 	options.farcry_signupfirstname = options.farcry_signupfirstname || "#signupfirstname";
 	options.farcry_signuplastname = options.farcry_signuplastname || "#signuplastname";
+	
+	options.farcry_signupname    = options.farcry_signupname          || "#signupname";
+	options.farcry_signupcompany = options.farcry_signupcompany       || "#signupcompany";
+	options.farcry_signupjobtype = options.farcry_signupsignupjobtype || "#signupjobtype";
+
 	options.farcry_signuperror = options.farcry_signuperror || "#signupform .form-group:first";
 	options.farcry_forgotpasswordemail = options.farcry_forgotpasswordemail || "#forgotpasswordemail";
 	options.farcry_forgotpassworderror = options.farcry_forgotpassworderror || "#forgotpasswordform .form-group:first";
@@ -124,15 +129,25 @@ fcsocial = function($, options){
 				"password": $(options.farcry_signuppassword).val(),
 				"confirmpassword": $(options.farcry_signupconfirmpassword).val(),
 				"firstname": $(options.farcry_signupfirstname).val(),
-				"lastname": $(options.farcry_signuplastname).val()
+				"lastname": $(options.farcry_signuplastname).val(),
+				"name": $(options.farcry_signupname).val()
 			},
 			success: function(r) {
-
 				if (r.bSuccess == true) {
 					var user = {
 						"signin": "farcry",
 						"email": $(options.farcry_signupemail).val()
 					};
+
+					if ($(options.farcry_signupname).val()) {
+						user.name = $(options.farcry_signupname).val();
+					}
+					if ($(options.farcry_signupcompany).val()) {
+						user.company_name = $(options.farcry_signupcompany).val();
+					}
+					if ($(options.farcry_signupjobtype).val()) {
+						user.job_title = $(options.farcry_signupjobtype).val();
+					}
 
 					// login
 					login(user);
